@@ -4,7 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>에드미 (Adme) - AI 광고 영상 자동화 플랫폼</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="AI가 광고 영상 제작부터 유튜브 자동 업로드, 수익화까지 한 번에 해결하는 플랫폼. 20-60초 촬영본만 올리면 AI가 완성된 광고 영상으로 만들어드립니다.">
+    <meta name="keywords" content="AI 광고, 영상 제작, 유튜브 자동화, 제휴 마케팅, 수익화, 1인 크리에이터, 숏폼, 광고 플랫폼">
+    <meta name="author" content="쌈박한소프트 (Team SB Soft)">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="ko">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="에드미 (Adme) - AI 광고 영상 자동화 플랫폼">
+    <meta property="og:description" content="AI가 광고 영상 제작부터 유튜브 자동 업로드, 수익화까지 한 번에 해결하는 플랫폼. 20-60초 촬영본만 올리면 AI가 완성된 광고 영상으로 만들어드립니다.">
+    <meta property="og:url" content="https://adme.kr">
+    <meta property="og:site_name" content="Adme">
+    <meta property="og:image" content="./image/AdMe_UI.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="ko_KR">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="에드미 (Adme) - AI 광고 영상 자동화 플랫폼">
+    <meta name="twitter:description" content="AI가 광고 영상 제작부터 유튜브 자동 업로드, 수익화까지 한 번에 해결하는 플랫폼.">
+    <meta name="twitter:image" content="./image/AdMe_UI.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://adme.kr">
+    
+    <!-- Favicon -->
     <link rel="icon" href="./image/favicon.ico">
+    <link rel="apple-touch-icon" href="./image/favicon.ico">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="./image/AdMe_UI.png" as="image">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" as="style">
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts - Inter -->
@@ -18,6 +54,37 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "에드미 (Adme)",
+        "description": "AI가 광고 영상 제작부터 유튜브 자동 업로드, 수익화까지 한 번에 해결하는 플랫폼",
+        "url": "https://adme.kr",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "KRW",
+            "availability": "https://schema.org/PreOrder"
+        },
+        "creator": {
+            "@type": "Organization",
+            "name": "쌈박한소프트 (Team SB Soft)",
+            "url": "https://adme.kr"
+        },
+        "featureList": [
+            "AI 촬영 지시서 제공",
+            "듀얼 수익 (유튜브 + 제휴)",
+            "초경량 올인원 파이프라인",
+            "유튜브 자동 업로드"
+        ],
+        "screenshot": "./image/AdMe_UI.png"
+    }
+    </script>
 </head>
 <body class="bg-slate-900 text-gray-300">
 
@@ -98,7 +165,7 @@
     <!-- Main Content -->
     <main>
         <!-- Hero Section -->
-        <section class="relative py-24 sm:py-32 lg:py-48 overflow-hidden bg-grid-pattern">
+        <section class="relative py-24 sm:py-32 lg:py-48 overflow-hidden bg-grid-pattern" aria-label="메인 소개 섹션">
             <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900/80 to-slate-900"></div>
             <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-7xl">
@@ -128,8 +195,9 @@
                 <div class="relative w-full max-w-5xl mx-auto rounded-xl shadow-2xl overflow-hidden" style="aspect-ratio: 16/10;">
                     <img 
                         src="./image/AdMe_UI.png" 
-                        alt="에드미 대시보드 UI 예시" 
+                        alt="에드미 AI 광고 영상 자동화 플랫폼 대시보드 화면 - URL 입력, 스크립트 생성, 영상 편집, 유튜브 업로드 기능을 보여주는 인터페이스" 
                         class="w-full h-full object-cover object-top border-4 border-slate-700 rounded-xl"
+                        loading="lazy"
                         onerror="this.src='https://placehold.co/1200x750/1E293B/E2E8F0?text=에드미+대시보드+UI'"
                     >
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-50"></div>
@@ -139,11 +207,11 @@
         </section>
 
         <!-- Problem Section -->
-        <section id="problem" class="py-16 sm:py-24 bg-slate-950">
+        <section id="problem" class="py-16 sm:py-24 bg-slate-950" aria-label="문제점 섹션">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto">
                     <h2 class="text-indigo-400 text-base font-semibold uppercase tracking-wider">The Problem</h2>
-                    <p class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">수익 창출, 생각보다 훨씬 어렵지 않으셨나요?</p>
+                    <h3 class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">수익 창출, 생각보다 훨씬 어렵지 않으셨나요?</h3>
                 </div>
                 <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- 문제 1 -->
@@ -151,7 +219,7 @@
                         <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500 text-white mb-6">
                             <ion-icon name="infinite-outline" class="text-2xl"></ion-icon>
                         </div>
-                        <h3 class="mb-3">1. 양산형 영상의 함정</h3>
+                        <h4 class="mb-3">1. 양산형 영상의 함정</h4>
                         <p class="text-gray-300">
                           유튜브와 숏폼 시장은 이미 비슷한 영상들로 포화 상태입니다.
                           <br>이제는 단순히 알고리즘에 기대기보다, 제휴 마케팅을 통해 직접적인 수익 구조를 설계하는 전략이 필요합니다.
@@ -162,7 +230,7 @@
                         <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500 text-white mb-6">
                             <ion-icon name="wallet-outline" class="text-2xl"></ion-icon>
                         </div>
-                        <h3 class="mb-3">2. 부담스러운 제작 비용</h3>
+                        <h4 class="mb-3">2. 부담스러운 제작 비용</h4>
                         <p class="text-gray-300">
                             영상을 하나 만들기 위해 이미지 생성, 영상 편집, 자막 툴 등 여러 플랫폼에 비싼 구독료를 내야 합니다. 
                             수익을 내기도 전에 투자 비용만 커지는 상황입니다.
@@ -173,11 +241,11 @@
         </section>
         
         <!-- Solution Section -->
-        <section id="solution" class="py-16 sm:py-24">
+        <section id="solution" class="py-16 sm:py-24" aria-label="솔루션 섹션">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto">
                     <h2 class="text-indigo-400 text-base font-semibold uppercase tracking-wider">The Solution</h2>
-                    <p class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">Adme는 '진짜 수익'에 집중합니다.</p>
+                    <h3 class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">Adme는 '진짜 수익'에 집중합니다.</h3>
                     <p class="mt-4 text-lg text-gray-300">
                         단순한 영상 제작 툴이 아닙니다. Adme는 광고 상품을 기반으로 사용자의 수익 창출 기회를 확실하게 제공하는 엔드투엔드 제휴 마케팅 플랫폼입니다.
                     </p>
@@ -189,7 +257,7 @@
                         <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500 text-white mb-6">
                             <ion-icon name="camera-outline" class="text-2xl"></ion-icon>
                         </div>
-                        <h3 class="mb-3">AI 촬영 지시서 제공</h3>
+                        <h4 class="mb-3">AI 촬영 지시서 제공</h4>
                         <p class="text-gray-300">
                             AI가 제품 URL에 맞춰 '훅-증거-CTA'가 포함된 샷 리스트를 자동 생성합니다. 템플릿 복제가 아닌, 매력적인 원본 영상의 퀄리티를 확보하세요.
                         </p>
@@ -199,7 +267,7 @@
                         <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500 text-white mb-6">
                             <ion-icon name="logo-youtube" class="text-2xl"></ion-icon>
                         </div>
-                        <h3 class="mb-3">듀얼 수익 (유튜브 + 제휴)</h3>
+                        <h4 class="mb-3">듀얼 수익 (유튜브 + 제휴)</h4>
                         <p class="text-gray-300">
                             쿠팡, 네이버 등 제휴 파라미터를 자동 삽입하고 고지 문구까지 처리합니다. (유튜브 수익 + 광고플랫폼 수수료)를 동시에 취할 수 있습니다.
                         </p>
@@ -209,7 +277,7 @@
                         <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500 text-white mb-6">
                             <ion-icon name="cog-outline" class="text-2xl"></ion-icon>
                         </div>
-                        <h3 class="mb-3">초경량 올인원 파이프라인</h3>
+                        <h4 class="mb-3">초경량 올인원 파이프라인</h4>
                         <p class="text-gray-300">
                             사용자가 촬영한 원본에 AI가 TTS, 자막, 오버레이 등 경량 편집을 적용하여 비용과 속도를 모두 잡았습니다. URL 입력부터 업로드까지 Adme 하나로 충분합니다.
                         </p>
@@ -219,11 +287,11 @@
         </section>
 
         <!-- How it Works Section -->
-        <section id="features" class="py-16 sm:py-24 bg-slate-950">
+        <section id="features" class="py-16 sm:py-24 bg-slate-950" aria-label="주요 기능 섹션">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto">
                     <h2 class="text-indigo-400 text-base font-semibold uppercase tracking-wider">How it Works</h2>
-                    <p class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">단 4단계로 끝나는 광고 영상 제작</p>
+                    <h3 class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">단 4단계로 끝나는 광고 영상 제작</h3>
                 </div>
 
                 <div class="mt-16 max-w-4xl mx-auto">
@@ -236,7 +304,7 @@
                             <div class="flex-shrink-0 w-12 h-12 rounded-full bg-indigo-600 border-4 border-slate-950 text-white flex items-center justify-center z-10 font-bold text-xl">1</div>
                             <div class="md:ml-8 flex-1">
                                 <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 mt-4 md:mt-0">
-                                    <h3 class="mb-2">URL 삽입</h3>
+                                    <h4 class="mb-2">URL 삽입</h4>
                                     <p>광고하고 싶은 제품의 URL을 붙여넣습니다.</p>
                                 </div>
                             </div>
@@ -247,7 +315,7 @@
                             <div class="flex-shrink-0 w-12 h-12 rounded-full bg-indigo-600 border-4 border-slate-950 text-white flex items-center justify-center z-10 font-bold text-xl">2</div>
                             <div class="md:mr-8 flex-1">
                                 <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 mt-4 md:mt-0">
-                                    <h3 class="mb-2">스크립트 확인 및 촬영</h3>
+                                    <h4 class="mb-2">스크립트 확인 및 촬영</h4>
                                     <p>AI가 제공하는 스크립트(촬영 지시서)대로 20~60초의 영상을 촬영합니다.</p>
                                 </div>
                             </div>
@@ -258,7 +326,7 @@
                             <div class="flex-shrink-0 w-12 h-12 rounded-full bg-indigo-600 border-4 border-slate-950 text-white flex items-center justify-center z-10 font-bold text-xl">3</div>
                             <div class="md:ml-8 flex-1">
                                 <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 mt-4 md:mt-0">
-                                    <h3 class="mb-2">AI 자동 편집</h3>
+                                    <h4 class="mb-2">AI 자동 편집</h4>
                                     <p>촬영본을 업로드하면 AI가 자막, TTS, 오버레이 등을 적용해 광고 영상으로 완성합니다.</p>
                                 </div>
                             </div>
@@ -269,7 +337,7 @@
                             <div class="flex-shrink-0 w-12 h-12 rounded-full bg-indigo-600 border-4 border-slate-950 text-white flex items-center justify-center z-10 font-bold text-xl">4</div>
                             <div class="md:mr-8 flex-1">
                                 <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 mt-4 md:mt-0">
-                                    <h3 class="mb-2">유튜브 자동 업로드</h3>
+                                    <h4 class="mb-2">유튜브 자동 업로드</h4>
                                     <p>완성된 영상은 제휴 링크, 고지 문구와 함께 사용자의 유튜브 계정에 자동으로 업로드됩니다.</p>
                                 </div>
                             </div>
@@ -280,32 +348,32 @@
         </section>
 
         <!-- Target Audience Section -->
-        <section id="target" class="py-16 sm:py-24">
+        <section id="target" class="py-16 sm:py-24" aria-label="대상 고객 섹션">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center max-w-3xl mx-auto">
                     <h2 class="text-indigo-400 text-base font-semibold uppercase tracking-wider">Target Audience</h2>
-                    <p class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">Adme는 이런 분들을 위해 만들었습니다.</p>
+                    <h3 class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">Adme는 이런 분들을 위해 만들었습니다.</h3>
                 </div>
                 
                 <div class="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 text-center">
                         <ion-icon name="person-circle-outline" class="text-5xl text-indigo-400 mx-auto mb-4"></ion-icon>
-                        <h3 class="mb-2">1인 크리에이터</h3>
+                        <h4 class="mb-2">1인 크리에이터</h4>
                         <p class="text-gray-300">저비용·단시간으로 부가 소득을 만들고 싶은 분</p>
                     </div>
                     <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 text-center">
                         <ion-icon name="storefront-outline" class="text-5xl text-indigo-400 mx-auto mb-4"></ion-icon>
-                        <h3 class="mb-2">중소 셀러 / 소상공인</h3>
+                        <h4 class="mb-2">중소 셀러 / 소상공인</h4>
                         <p class="text-gray-300">내 제품을 숏폼으로 홍보해 전환 트래픽을 만들고 싶은 분</p>
                     </div>
                     <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 text-center">
                         <ion-icon name="briefcase-outline" class="text-5xl text-indigo-400 mx-auto mb-4"></ion-icon>
-                        <h3 class="mb-2">마케팅 프리랜서</h3>
+                        <h4 class="mb-2">마케팅 프리랜서</h4>
                         <p class="text-gray-300">성과형 콘텐츠가 필요하고 운영 리스크를 줄이고 싶은 마케터</p>
                     </div>
                     <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 text-center">
                         <ion-icon name="school-outline" class="text-5xl text-indigo-400 mx-auto mb-4"></ion-icon>
-                        <h3 class="mb-2">시니어 / 재직자</h3>
+                        <h4 class="mb-2">시니어 / 재직자</h4>
                         <p class="text-gray-300">지속 가능한 디지털 일거리나 부업을 찾는 분</p>
                     </div>
                 </div>
