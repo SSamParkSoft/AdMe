@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>에드미(ADMI) — 상품 URL→촬영지시서→완편→유튜브 자동 업로드</title>
+<meta name="description" content="에드미는 상품 URL과 20–60초 촬영본만 올리면 AI가 광고 쇼츠를 완성·고지·유튜브에 원클릭 업로드하는 수익화 도구입니다.">
+
+<style>
+  :root{
+    --bg:#0e1025;
+    --ink:#e9ecf8;
+    --muted:#a9b1c7;
+    --primary:#7c8cff;
+    --secondary:#00d0b3;
+    --surface:#14183a;
+    --panel:#171c44;
+    --line:#2a3161;
+    --chip:#202656;
+    --warn:#ffd56a;
+    --ok:#38f2a3;
+    --shadow: 0 10px 40px rgba(0,0,0,.35);
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; color:var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial;
+    background:
+      radial-gradient(1200px 600px at -10% -10%, #24306d55, transparent 60%),
+      radial-gradient(900px 420px at 110% -10%, #00d0b325, transparent 60%),
+      radial-gradient(1000px 500px at 50% 110%, #6c7bff1a, transparent 60%),
+      var(--bg);
+    letter-spacing:.2px;
+  }
+  .container{max-width:1180px; margin:0 auto; padding:0 20px}
+  .nav{
+    position:sticky; top:0; z-index:30;
+    backdrop-filter: blur(10px); background:linear-gradient(180deg, rgba(20,24,58,.65), rgba(20,24,58,.35));
+    border-bottom:1px solid var(--line);
+  }
+  .navwrap{display:flex; align-items:center; justify-content:space-between; height:64px}
+  .brand{display:flex; align-items:center; gap:12px}
+  .logo{
+    width:36px;height:36px;border-radius:10px;
+    background:linear-gradient(135deg, var(--primary), var(--secondary)); display:grid; place-items:center; color:#0b0e29; font-weight:900; box-shadow:var(--shadow)
+  }
+  .brand h1{margin:0; font-size:18px; font-weight:900}
+  .brand small{display:block; color:var(--muted); margin-top:2px; font-size:12px}
+  .nav a{color:#cfd6ff; text-decoration:none; font-size:14px; padding:8px 10px; border-radius:10px}
+  .nav a:hover{background:#1a1f4a}
+  .cta{all:unset; cursor:pointer; padding:10px 14px; border-radius:12px; font-weight:800; background:linear-gradient(135deg, var(--primary), #98a5ff); color:#0b0f2b; box-shadow:var(--shadow)}
+  .cta.secondary{background:linear-gradient(135deg, var(--secondary), #64ffe8)}
+
+  .hero{position:relative; padding:80px 0 40px}
+  .hero .grid{display:grid; grid-template-columns: 1.1fr .9fr; gap:28px; align-items:center}
+  .h-title{font-size:42px; line-height:1.15; margin:0 0 14px; letter-spacing:.3px}
+  .h-sub{color:#c9d0ef; font-size:16px; margin:0 0 22px}
+  .h-badges{display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 26px}
+  .badge{
+    padding:7px 10px; border-radius:999px; font-size:12px; color:#cfe3ff; background:#1a1f4a; border:1px solid var(--line)
+  }
+  .hero-cta{display:flex; gap:12px; align-items:center}
+  .kpis{display:flex; gap:28px; margin-top:26px}
+  .kpis .k{background:#141a3e; border:1px solid var(--line); border-radius:14px; padding:12px 14px}
+  .k .n{font-size:20px; font-weight:900}
+  .k .d{font-size:12px; color:#aab3d6}
+
+  /* mock right */
+  .mock{
+    border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--panel); box-shadow:var(--shadow)
+  }
+  .mock .head{display:flex; justify-content:space-between; padding:12px 14px; border-bottom:1px solid var(--line)}
+  .mock .body{padding:16px; display:grid; gap:12px}
+  .input{
+    display:flex; align-items:center; gap:8px; background:#12163a; border:1px solid var(--line); padding:10px 12px; border-radius:12px
+  }
+  .input input{all:unset; flex:1; color:#fff; font-size:14px}
+  .btn{all:unset; cursor:pointer; padding:10px 12px; background:#121a46; color:#d1d8ff; border:1px solid var(--line); border-radius:10px}
+  .btn.primary{background:linear-gradient(135deg, var(--primary), #aab4ff); color:#0b0f2b; font-weight:800}
+  .stack{display:grid; gap:10px}
+  .shot{display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:flex-start; background:#141a3c; border:1px dashed #2a3061; border-radius:12px; padding:10px 12px}
+  .shot .num{width:24px;height:24px;border-radius:8px;background:#212658; display:grid; place-items:center; color:#cfe0ff; font-size:12px}
+  .preview{
+    position:relative; border-radius:12px; overflow:hidden; background:#0e1331; border:1px solid var(--line)
+  }
+  .preview .thumb{height:180px; background:
+    radial-gradient(420px 180px at 20% 30%, #00d0b34a, transparent 60%),
+    linear-gradient(135deg, #26306b, #111633);}
+  .pricetag{position:absolute; top:10px; right:10px; background:rgba(20,24,60,.85); border:1px solid #2e3567; padding:6px 10px; border-radius:999px; font-size:12px}
+  .afftag{position:absolute; top:10px; left:10px; background:linear-gradient(135deg, var(--secondary), var(--primary)); color:#0b0f22; font-weight:900; padding:4px 8px; border-radius:8px; font-size:11px}
+  .play{position:absolute; left:12px; bottom:12px; display:flex; align-items:center; gap:8px; padding:8px 12px; background:rgba(0,0,0,.5); border:1px solid #2a2f57; border-radius:999px}
+
+  .logos{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+  .logo-pill{padding:7px 10px; border-radius:999px; border:1px solid var(--line); background:#14183a; font-size:12px; color:#cbd6ff}
+
+  /* features */
+  .section{padding:56px 0}
+  .s-head{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px}
+  .s-head h2{margin:0; font-size:22px}
+  .grid-3{display:grid; grid-template-columns: repeat(3, 1fr); gap:16px}
+  .grid-2{display:grid; grid-template-columns: repeat(2, 1fr); gap:16px}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px}
+  .card h3{margin:0 0 6px; font-size:16px}
+  .card p{margin:0; color:#c7cfee; font-size:14px}
+  .icon{width:36px;height:36px;border-radius:10px; display:grid; place-items:center; margin-bottom:8px;
+         background:linear-gradient(135deg,#24306b,#12183a); border:1px solid #2b3265}
+
+  /* flow */
+  .flow{display:grid; grid-template-columns: repeat(5, 1fr); gap:10px}
+  .step{background:#141a3e; border:1px dashed #2a3161; border-radius:14px; padding:12px}
+  .step b{display:block; margin-bottom:6px}
+  .step small{color:#aeb7d9}
+
+  /* pricing */
+  .pricing{display:grid; grid-template-columns:repeat(2,1fr); gap:16px}
+  .price-card{position:relative}
+  .price{font-size:28px; font-weight:900}
+  .tick{display:flex; align-items:center; gap:8px; margin:8px 0; color:#cfe0ff; font-size:14px}
+  .tick i{width:10px;height:10px;border-radius:50%; background:var(--ok); box-shadow:0 0 0 4px #26ff7a22}
+  .best{position:absolute; top:-12px; right:12px; background:linear-gradient(135deg,var(--secondary),var(--primary)); color:#0b0f2b; font-weight:900; padding:6px 10px; border-radius:999px; font-size:12px}
+
+  /* FAQ */
+  details{background:#141a3e; border:1px solid var(--line); border-radius:12px; padding:12px 14px}
+  summary{cursor:pointer; list-style:none; font-weight:700}
+  summary::-webkit-details-marker{display:none}
+  details p{color:#c8cff0}
+
+  .footer{padding:28px 0; border-top:1px solid var(--line); color:#aeb6dc; font-size:13px}
+  @media (max-width: 1024px){
+    .hero .grid{grid-template-columns:1fr}
+    .grid-3{grid-template-columns:1fr}
+    .pricing{grid-template-columns:1fr}
+    .flow{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="container navwrap">
+    <div class="brand">
+      <div class="logo">AD</div>
+      <div>
+        <h1>에드미 ADMI</h1>
+        <small>상품 URL → 촬영지시서 → 완편 → 유튜브 자동 업로드</small>
+      </div>
+    </div>
+    <nav>
+      <a href="#how">작동방식</a>
+      <a href="#features">특징</a>
+      <a href="#pricing">요금제</a>
+      <a href="#faq">FAQ</a>
+      <button class="cta" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">베타 신청</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="grid">
+        <div>
+          <h2 class="h-title">URL 붙여넣고,<br>20–60초 촬영본만 올리세요.<br>나머지는 <span style="background:linear-gradient(135deg,var(--secondary),var(--primary)); -webkit-background-clip:text; background-clip:text; color:transparent">에드미</span>가 합니다.</h2>
+          <p class="h-sub">광고상품 기반 쇼츠 자동 제작 · 제휴 고지 · 유튜브 원클릭 업로드.<br> <b>14일 내 첫 제휴수익</b>을 노리는 가장 빠른 방법.</p>
+          <div class="h-badges">
+            <span class="badge">원클릭 업로드</span>
+            <span class="badge">촬영 지시서 AI</span>
+            <span class="badge">제휴 고지 자동</span>
+            <span class="badge">Shorts 최적화</span>
+          </div>
+          <div class="hero-cta">
+            <button class="cta secondary" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">베타 신청</button>
+            <a class="cta" href="#demo">데모 보기</a>
+          </div>
+          <div class="kpis">
+            <div class="k"><div class="n">≤ 14일</div><div class="d">TTFI(첫 수익 목표)</div></div>
+            <div class="k"><div class="n">1.5%+</div><div class="d">목표 CTR</div></div>
+            <div class="k"><div class="n">2채널</div><div class="d">유튜브+파트너스</div></div>
+          </div>
+          <div class="logos">
+            <span class="logo-pill">YouTube 연동</span>
+            <span class="logo-pill">쿠팡 파트너스</span>
+            <span class="logo-pill">네이버 쇼핑파트너스</span>
+            <span class="logo-pill">스마트스토어</span>
+          </div>
+        </div>
+
+        <!-- Mock UI -->
+        <div class="mock" id="demo">
+          <div class="head"><b>에드미 — 원클릭 업로드</b><button class="btn primary">업로드 실행</button></div>
+          <div class="body">
+            <div class="input">
+              <!-- link icon -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#94a4ff" aria-hidden="true"><path d="M3.9 12a5 5 0 0 1 5-5h3v2h-3a3 3 0 1 0 0 6h3v2h-3a5 5 0 0 1-5-5Zm7-1h2v2h-2v-2Zm4.1-4h-3v2h3a3 3 0 0 1 0 6h-3v2h3a5 5 0 1 0 0-10Z"/></svg>
+              <input placeholder="예) https://www.coupang.com/..." aria-label="상품 URL 입력">
+              <button class="btn">지시서 생성</button>
+            </div>
+
+            <div class="stack">
+              <div class="shot">
+                <div class="num">1</div>
+                <div><b>훅 3초</b><br>김 모락모락 클로즈업 — “동급 대비 포인트 2가지”</div>
+                <button class="btn">복사</button>
+              </div>
+              <div class="shot">
+                <div class="num">2</div>
+                <div><b>포인트 10초</b><br>구성/단면 컷 + “탄력/식감” 자막 · 조명 약하면 창가 대체</div>
+                <button class="btn">복사</button>
+              </div>
+              <div class="shot">
+                <div class="num">3</div>
+                <div><b>CTA 7초</b><br>가격/쿠폰 오버레이 + “설명란 링크(제휴) 확인”</div>
+                <button class="btn">복사</button>
+              </div>
+            </div>
+
+            <div class="preview" aria-label="완성 영상 미리보기">
+              <div class="thumb"></div>
+              <div class="afftag">#광고 · 제휴포함</div>
+              <div class="pricetag">₩8,900 · 쿠폰</div>
+              <div class="play">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#eaf0ff"><path d="M8 5v14l11-7z"/></svg>
+                미리보기
+              </div>
+            </div>
+
+            <div class="logos">
+              <span class="logo-pill">자막/TTS 적용</span>
+              <span class="logo-pill">썸네일/제목 A·B</span>
+              <span class="logo-pill">Shorts 규격 9:16</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="container">
+      <div class="s-head"><h2>작동 방식</h2></div>
+      <div class="flow">
+        <div class="step"><b>① URL</b><small>상품 페이지 붙여넣기</small></div>
+        <div class="step"><b>② 지시서</b><small>샷 3–5 · 훅/증거/CTA</small></div>
+        <div class="step"><b>③ 촬영</b><small>20–60초 원본</small></div>
+        <div class="step"><b>④ 완편</b><small>컷편집/자막/TTS/고지</small></div>
+        <div class="step"><b>⑤ 업로드</b><small>유튜브 자동 · A/B</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="s-head">
+        <h2>왜 에드미인가</h2>
+        <span class="badge">광고수익 + 제휴수수료 = 이중수익</span>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="icon">🎬</div>
+          <h3>원클릭 업로드</h3>
+          <p>제작·고지·업로드까지 한 번에. 반복 작업 제거.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🧭</div>
+          <h3>촬영 지시서 AI</h3>
+          <p>샷 단위 지시 + 대체안. 초보·시니어도 고품질 촬영.</p>
+        </div>
+        <div class="card">
+          <div class="icon">⚖️</div>
+          <h3>정책/고지 자동</h3>
+          <p>영상/설명란 이중 고지 · 민감 카테고리 필터.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📈</div>
+          <h3>전환 최적화</h3>
+          <p>3초 훅 · 썸네일/제목 A·B · CTA 위치 최적화.</p>
+        </div>
+        <div class="card">
+          <div class="icon">💸</div>
+          <h3>저비용 구조</h3>
+          <p>사용자 촬영 + 경량 합성 → 프리랜서 대비 비용↓.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🛍️</div>
+          <h3>국내용 제휴</h3>
+          <p>쿠팡·네이버 파라미터 자동 · 링크 깨짐 방지.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="s-head">
+        <h2>요금제</h2>
+        <span class="badge">14일 수익 < 구독료 → 다음 달 무료</span>
+      </div>
+      <div class="pricing">
+        <div class="card price-card">
+          <h3>Starter</h3>
+          <div class="price">₩19,000<span style="font-size:14px;color:#aab3d6"> /월</span></div>
+          <div class="tick"><i></i> 월 20영상</div>
+          <div class="tick"><i></i> 촬영 지시서 10회</div>
+          <div class="tick"><i></i> 유튜브 자동 업로드</div>
+          <button class="cta" style="margin-top:10px" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">시작하기</button>
+        </div>
+        <div class="card price-card">
+          <div class="best">추천</div>
+          <h3>Pro</h3>
+          <div class="price">₩49,000<span style="font-size:14px;color:#aab3d6"> /월</span></div>
+          <div class="tick"><i></i> 월 80영상</div>
+          <div class="tick"><i></i> 지시서 무제한</div>
+          <div class="tick"><i></i> 썸네일/제목 A·B</div>
+          <div class="tick"><i></i> 릴스/틱톡 리패키징</div>
+          <button class="cta secondary" style="margin-top:10px" onclick="document.getElementById('apply').scrollIntoView({behavior:'smooth'})">Pro로 시작</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPLY -->
+  <section class="section" id="apply">
+    <div class="container">
+      <div class="s-head"><h2>베타 신청</h2><span class="badge">선착순 30명</span></div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>연결 정보</h3>
+          <p style="margin:8px 0 14px">YouTube 계정, 제휴 파라미터(쿠팡/네이버)를 입력하면 빠르게 시작할 수 있어요.</p>
+          <label style="font-size:12px;color:#aeb6dc">이메일</label>
+          <input style="width:100%;margin:6px 0 10px;padding:12px;border-radius:12px;border:1px solid var(--line);background:#12163a;color:#fff" placeholder="you@example.com">
+          <label style="font-size:12px;color:#aeb6dc">YouTube 채널 URL</label>
+          <input style="width:100%;margin:6px 0 10px;padding:12px;border-radius:12px;border:1px solid var(--line);background:#12163a;color:#fff" placeholder="https://youtube.com/@...">
+          <button class="cta">신청하기</button>
+        </div>
+        <div class="card">
+          <h3>14일 챌린지 체크리스트</h3>
+          <div class="tick"><i></i> 1주차: 영상 3–5개 업로드</div>
+          <div class="tick"><i></i> 첫 구매 알림 경험</div>
+          <div class="tick"><i></i> 2주차: 누적 10–15개 업로드</div>
+          <div class="tick"><i></i> 썸네일/제목 A·B 적용</div>
+          <div class="tick"><i></i> 14일 수익 ≥ 구독료 목표</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="s-head"><h2>FAQ</h2></div>
+      <div class="grid-2">
+        <details class="card" open>
+          <summary>정말 촬영을 내가 해야 하나요?</summary>
+          <p>네. 에드미는 <b>샷 단위 지시서</b>로 무엇을 찍을지 안내합니다. 사용자가 직접 촬영해 템플릿 복제 영상을 피하고, 광고 전환율을 높입니다.</p>
+        </details>
+        <details class="card" open>
+          <summary>수익은 어떻게 발생하나요?</summary>
+          <p>유튜브 광고수익 + 제휴 플랫폼(쿠팡/네이버 등)의 <b>수수료</b> 두 경로가 열립니다. 링크/고지는 자동 처리됩니다.</p>
+        </details>
+        <details class="card">
+          <summary>정책 위반은 걱정 없나요?</summary>
+          <p>영상 내/설명란 <b>이중 고지</b>와 민감 카테고리 필터를 기본 적용합니다. 가이드를 따르도록 UI에 체크리스트가 제공됩니다.</p>
+        </details>
+        <details class="card">
+          <summary>얼마나 빠르게 결과가 나오나요?</summary>
+          <p>일반적으로 1주 내 첫 클릭/문의, 2주 내 첫 구매를 목표로 합니다(카테고리/품질에 따라 차이).</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+    <div>© 2025 ADMI — 에드미. All rights reserved.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <span class="logo-pill">문의: hello@admi.example</span>
+      <span class="logo-pill">이용약관</span>
+      <span class="logo-pill">개인정보처리방침</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
