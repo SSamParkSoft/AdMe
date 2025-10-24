@@ -1,0 +1,82 @@
+/* 기본 폰트 설정 */
+body {
+    font-family: 'Noto Sans KR', 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* 그라디언트 텍스트 */
+.text-gradient {
+    background: linear-gradient(to right, #4F46E5, #A855F7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* 그리드 패턴 배경 */
+.bg-grid-pattern {
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 2rem 2rem;
+}
+
+/* CTA 버튼 스타일 */
+.cta-button {
+    @apply px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-2xl transform transition-all duration-300;
+    @apply hover:from-indigo-500 hover:to-purple-500 hover:scale-110 hover:shadow-indigo-500/50 hover:shadow-2xl active:scale-95;
+    @apply border-2 border-transparent hover:border-indigo-400;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.cta-button:hover::before {
+    left: 100%;
+}
+
+/* 버튼 애니메이션 효과 */
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(79, 70, 229, 0.8), 0 0 40px rgba(168, 85, 247, 0.4);
+    }
+}
+
+.cta-button {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.cta-button:hover {
+    animation: none;
+}
+
+/* 버튼 텍스트 강조 */
+.cta-button {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+}
+
+.cta-button-secondary {
+    @apply px-6 py-3 text-base font-bold text-white bg-gray-700 rounded-lg shadow-lg transform transition-all duration-300;
+    @apply hover:bg-gray-600 hover:scale-105 active:scale-95;
+}
+
+/* 제목 스타일 */
+h2 {
+    @apply text-3xl font-bold tracking-tight text-white sm:text-4xl;
+}
+
+h3 {
+    @apply text-xl font-semibold text-white;
+}

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>에드미 (Adme) - AI 광고 영상 자동화 플랫폼</title>
+    <link rel="icon" href="./image/favicon.ico">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Heroicons for basic icons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.ㅜㅐjs"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-900 text-gray-300">
+
+    <!-- 모달 창 (숨겨진 상태) -->
+    <div id="modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm hidden">
+        <div class="bg-slate-800 text-white w-11/12 max-w-md p-6 rounded-2xl shadow-2xl m-4 transform transition-all" id="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold text-gradient">사전 등록</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            <p class="mb-6">Adme의 놀라운 기능을 가장 먼저 경험하세요! 이메일을 남겨주시면 런칭 소식을 알려드립니다.</p>
+            <form id="signupForm">
+                <label for="email" class="block text-sm font-medium text-gray-300 mb-2">이메일 주소</label>
+                <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="your@email.com">
+                <button type="submit" class="w-full cta-button mt-6">
+                    <span id="formButtonText">런칭 알림 받기</span>
+                    <span id="formSpinner" class="hidden animate-spin h-5 w-5 border-t-2 border-r-2 border-white rounded-full mx-auto"></span>
+                </button>
+            </form>
+            <p id="formSuccess" class="text-green-400 mt-4 text-center hidden">✅ 감사합니다! 성공적으로 등록되었습니다.</p>
+            <p id="formError" class="text-red-400 mt-4 text-center hidden">❌ 오류가 발생했습니다. 다시 시도해주세요.</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 w-full border-b border-slate-800">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- 로고 -->
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-3xl font-black text-gradient">Adme</a>
+                </div>
+                
+                <!-- 데스크탑 메뉴 -->
+                <div class="hidden md:flex md:items-center md:space-x-8">
+                    <a href="#problem" class="text-gray-300 hover:text-white transition-colors">문제점</a>
+                    <a href="#solution" class="text-gray-300 hover:text-white transition-colors">솔루션</a>
+                    <a href="#features" class="text-gray-300 hover:text-white transition-colors">주요 기능</a>
+                    <a href="#target" class="text-gray-300 hover:text-white transition-colors">대상 고객</a>
+                </div>
+                
+                <!-- CTA 버튼 (데스크탑) -->
+                <div class="hidden md:block">
+                    <button class="cta-button openModal">
+                        <ion-icon name="rocket-outline" class="inline-block mr-2 -mt-1"></ion-icon>
+                        사전 등록하기
+                    </button>
+                </div>
+
+                <!-- 모바일 메뉴 버튼 -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-300 hover:text-white p-2 rounded-md">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 모바일 메뉴 (숨겨진 상태) -->
+        <div id="mobile-menu" class="md:hidden hidden bg-slate-900 border-t border-slate-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#problem" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-slate-800">문제점</a>
+                <a href="#solution" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-slate-800">솔루션</a>
+                <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-slate-800">주요 기능</a>
+                <a href="#target" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-slate-800">대상 고객</a>
+            </div>
+            <div class="px-5 pb-5">
+                <button class="w-full cta-button openModal">
+                    <ion-icon name="rocket-outline" class="inline-block mr-2 -mt-1"></ion-icon>
+                    사전 등록하기
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="relative py-24 sm:py-32 lg:py-48 overflow-hidden bg-grid-pattern">
+            <div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-900/80 to-slate-900"></div>
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-7xl">
+                    원하는 상품을 넣고, <br>
+                    <span class="text-gradient">20-60초 촬영본만</span> 올리세요.
+                </h1>
+                <p class="mt-6 text-xl text-gray-300 max-w-2xl mx-auto">
+                    AI가 광고 영상 제작부터 유튜브 자동 업로드, 수익화까지 한 번에 해결합니다.
+                    <br>당신은 촬영에만 집중하세요.
+                </p>
+                <div class="mt-12 flex flex-col justify-center items-center gap-6">
+                    <button class="cta-button text-xl px-10 py-5 openModal">
+                        <ion-icon name="rocket-outline" class="inline-block mr-3 -mt-1 text-2xl"></ion-icon>
+                        Adme 사전 등록하기
+                    </button>
+                    <a href="#solution" class="cta-button-secondary text-lg">
+                        더 알아보기
+                        <ion-icon name="arrow-down-circle-outline" class="inline-block ml-2 -mt-1"></ion-icon>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- UI Mockup Section (from PDF) -->
+        <section class="py-16 sm:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="relative w-full max-w-5xl mx-auto rounded-xl shadow-2xl overflow-hidden" style="aspect-ratio: 16/10;">
+                    <img 
+                        src="./image/AdMe_UI.png" 
+                        alt="에드미 대시보드 UI 예시" 
+                        class="w-full h-full object-cover object-top border-4 border-slate-700 rounded-xl"
+                        onerror="this.src='https://placehold.co/1200x750/1E293B/E2E8F0?text=에드미+대시보드+UI'"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-50"></div>
+                </div>
+                <p class="text-center text-gray-400 mt-4 italic">실제 '에드미' 개발 중인 UI 화면 예시 </p>
+            </div>
+        </section>
+
+        <!-- Problem Section -->
+        <section id="problem" class="py-16 sm:py-24 bg-slate-950">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-indigo-400 text-base font-semibold uppercase tracking-wider">The Problem</h2>
+                    <p class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">수익 창출, 생각보다 훨씬 어렵지 않으셨나요?</p>
+                </div>
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- 문제 1 -->
+                    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500 text-white mb-6">
+                            <ion-icon name="infinite-outline" class="text-2xl"></ion-icon>
+                        </div>
+                        <h3 class="mb-3">1. 양산형 영상의 함정</h3>
+                        <p class="text-gray-300">
+                          유튜브와 숏폼 시장은 이미 비슷한 영상들로 포화 상태입니다.
+                          <br>이제는 단순히 알고리즘에 기대기보다, 제휴 마케팅을 통해 직접적인 수익 구조를 설계하는 전략이 필요합니다.
+                        </p>
+                    </div>
+                    <!-- 문제 2 -->
+                    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500 text-white mb-6">
+                            <ion-icon name="wallet-outline" class="text-2xl"></ion-icon>
+                        </div>
+                        <h3 class="mb-3">2. 부담스러운 제작 비용</h3>
+                        <p class="text-gray-300">
+                            영상을 하나 만들기 위해 이미지 생성, 영상 편집, 자막 툴 등 여러 플랫폼에 비싼 구독료를 내야 합니다. 
+                            수익을 내기도 전에 투자 비용만 커지는 상황입니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Solution Section -->
+        <section id="solution" class="py-16 sm:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-indigo-400 text-base font-semibold uppercase tracking-wider">The Solution</h2>
+                    <p class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">Adme는 '진짜 수익'에 집중합니다.</p>
+                    <p class="mt-4 text-lg text-gray-300">
+                        단순한 영상 제작 툴이 아닙니다. Adme는 광고 상품을 기반으로 사용자의 수익 창출 기회를 확실하게 제공하는 엔드투엔드 제휴 마케팅 플랫폼입니다.
+                    </p>
+                </div>
+
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- 핵심 가치 1 -->
+                    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 transform transition-transform duration-300 hover:scale-105 hover:border-indigo-500">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500 text-white mb-6">
+                            <ion-icon name="camera-outline" class="text-2xl"></ion-icon>
+                        </div>
+                        <h3 class="mb-3">AI 촬영 지시서 제공</h3>
+                        <p class="text-gray-300">
+                            AI가 제품 URL에 맞춰 '훅-증거-CTA'가 포함된 샷 리스트를 자동 생성합니다. 템플릿 복제가 아닌, 매력적인 원본 영상의 퀄리티를 확보하세요.
+                        </p>
+                    </div>
+                    <!-- 핵심 가치 2 -->
+                    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 transform transition-transform duration-300 hover:scale-105 hover:border-indigo-500">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500 text-white mb-6">
+                            <ion-icon name="logo-youtube" class="text-2xl"></ion-icon>
+                        </div>
+                        <h3 class="mb-3">듀얼 수익 (유튜브 + 제휴)</h3>
+                        <p class="text-gray-300">
+                            쿠팡, 네이버 등 제휴 파라미터를 자동 삽입하고 고지 문구까지 처리합니다. (유튜브 수익 + 광고플랫폼 수수료)를 동시에 취할 수 있습니다.
+                        </p>
+                    </div>
+                    <!-- 핵심 가치 3 -->
+                    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 transform transition-transform duration-300 hover:scale-105 hover:border-indigo-500">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-indigo-500 text-white mb-6">
+                            <ion-icon name="cog-outline" class="text-2xl"></ion-icon>
+                        </div>
+                        <h3 class="mb-3">초경량 올인원 파이프라인</h3>
+                        <p class="text-gray-300">
+                            사용자가 촬영한 원본에 AI가 TTS, 자막, 오버레이 등 경량 편집을 적용하여 비용과 속도를 모두 잡았습니다. URL 입력부터 업로드까지 Adme 하나로 충분합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it Works Section -->
+        <section id="features" class="py-16 sm:py-24 bg-slate-950">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-indigo-400 text-base font-semibold uppercase tracking-wider">How it Works</h2>
+                    <p class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">단 4단계로 끝나는 광고 영상 제작</p>
+                </div>
+
+                <div class="mt-16 max-w-4xl mx-auto">
+                    <div class="relative">
+                        <!-- 수직선
+                        <div class="absolute left-6 md:left-1/2 top-10 bottom-10 w-1 bg-slate-700 rounded-full -translate-x-1/2"></div> -->
+
+                        <!-- 1단계 -->
+                        <div class="flex md:items-center mb-12 flex-col md:flex-row">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-indigo-600 border-4 border-slate-950 text-white flex items-center justify-center z-10 font-bold text-xl">1</div>
+                            <div class="md:ml-8 flex-1">
+                                <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 mt-4 md:mt-0">
+                                    <h3 class="mb-2">URL 삽입</h3>
+                                    <p>광고하고 싶은 제품의 URL을 붙여넣습니다.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2단계 -->
+                        <div class="flex md:items-center mb-12 flex-col md:flex-row-reverse">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-indigo-600 border-4 border-slate-950 text-white flex items-center justify-center z-10 font-bold text-xl">2</div>
+                            <div class="md:mr-8 flex-1">
+                                <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 mt-4 md:mt-0">
+                                    <h3 class="mb-2">스크립트 확인 및 촬영</h3>
+                                    <p>AI가 제공하는 스크립트(촬영 지시서)대로 20~60초의 영상을 촬영합니다.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3단계 -->
+                        <div class="flex md:items-center mb-12 flex-col md:flex-row">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-indigo-600 border-4 border-slate-950 text-white flex items-center justify-center z-10 font-bold text-xl">3</div>
+                            <div class="md:ml-8 flex-1">
+                                <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 mt-4 md:mt-0">
+                                    <h3 class="mb-2">AI 자동 편집</h3>
+                                    <p>촬영본을 업로드하면 AI가 자막, TTS, 오버레이 등을 적용해 광고 영상으로 완성합니다.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4단계 -->
+                        <div class="flex md:items-center flex-col md:flex-row-reverse">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full bg-indigo-600 border-4 border-slate-950 text-white flex items-center justify-center z-10 font-bold text-xl">4</div>
+                            <div class="md:mr-8 flex-1">
+                                <div class="bg-slate-800 p-6 rounded-xl shadow-lg border border-slate-700 mt-4 md:mt-0">
+                                    <h3 class="mb-2">유튜브 자동 업로드</h3>
+                                    <p>완성된 영상은 제휴 링크, 고지 문구와 함께 사용자의 유튜브 계정에 자동으로 업로드됩니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section id="target" class="py-16 sm:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-indigo-400 text-base font-semibold uppercase tracking-wider">Target Audience</h2>
+                    <p class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">Adme는 이런 분들을 위해 만들었습니다.</p>
+                </div>
+                
+                <div class="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 text-center">
+                        <ion-icon name="person-circle-outline" class="text-5xl text-indigo-400 mx-auto mb-4"></ion-icon>
+                        <h3 class="mb-2">1인 크리에이터</h3>
+                        <p class="text-gray-300">저비용·단시간으로 부가 소득을 만들고 싶은 분</p>
+                    </div>
+                    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 text-center">
+                        <ion-icon name="storefront-outline" class="text-5xl text-indigo-400 mx-auto mb-4"></ion-icon>
+                        <h3 class="mb-2">중소 셀러 / 소상공인</h3>
+                        <p class="text-gray-300">내 제품을 숏폼으로 홍보해 전환 트래픽을 만들고 싶은 분</p>
+                    </div>
+                    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 text-center">
+                        <ion-icon name="briefcase-outline" class="text-5xl text-indigo-400 mx-auto mb-4"></ion-icon>
+                        <h3 class="mb-2">마케팅 프리랜서</h3>
+                        <p class="text-gray-300">성과형 콘텐츠가 필요하고 운영 리스크를 줄이고 싶은 마케터</p>
+                    </div>
+                    <div class="bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 text-center">
+                        <ion-icon name="school-outline" class="text-5xl text-indigo-400 mx-auto mb-4"></ion-icon>
+                        <h3 class="mb-2">시니어 / 재직자</h3>
+                        <p class="text-gray-300">지속 가능한 디지털 일거리나 부업을 찾는 분</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="py-24 sm:py-32 bg-gradient-to-t from-slate-950 to-slate-900">
+            <div class="max-w-3xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                    지금 바로 '수익 창출'의<br>경험을 시작하세요.
+                </h2>
+                <p class="mt-6 text-lg text-gray-300">
+                    Adme는 양산형 영상이 아닌, 고품질 광고 콘텐츠 생태계를 만들어 1인 크리에이터 시장의 새로운 붐을 일으킬 것입니다.
+                </p>
+                <button class="cta-button text-xl px-10 py-5 mt-10 openModal">
+                    <ion-icon name="rocket-outline" class="inline-block mr-3 -mt-1 text-2xl"></ion-icon>
+                    Adme 서비스 사전 등록하기
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-xl font-bold text-gradient mb-2">Adme</p>
+            <p class="text-gray-400">by 쌈박한소프트 (Team SB Soft)</p>
+            <p class="mt-4 text-sm text-gray-500">
+                &copy; 2025 SB Soft. All rights reserved.
+            </fs>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 모바일 메뉴 토글
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // 모바일 메뉴 링크 클릭 시 메뉴 닫기
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // 모달 열기/닫기
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modal-content');
+            const openModalButtons = document.querySelectorAll('.openModal');
+            const closeModalButton = document.getElementById('closeModal');
+            
+            const openModal = () => modal.classList.remove('hidden');
+            const closeModal = () => modal.classList.add('hidden');
+
+            openModalButtons.forEach(btn => btn.addEventListener('click', openModal));
+            closeModalButton.addEventListener('click', closeModal);
+            
+            // 모달 바깥 클릭 시 닫기
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // 모달 컨텐츠 클릭 시 닫기 방지
+            modalContent.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            // Esc 키로 모달 닫기
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+
+            // 모바일 메뉴의 '사전 등록하기' 버튼도 모달 열기
+            mobileMenu.querySelector('.openModal').addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                openModal();
+            });
+
+            // 가짜 폼 제출 핸들러 (데모용)
+            const signupForm = document.getElementById('signupForm');
+            const formButtonText = document.getElementById('formButtonText');
+            const formSpinner = document.getElementById('formSpinner');
+            const formSuccess = document.getElementById('formSuccess');
+            const formError = document.getElementById('formError');
+
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // 로딩 상태
+                formButtonText.classList.add('hidden');
+                formSpinner.classList.remove('hidden');
+                formSuccess.classList.add('hidden');
+                formError.classList.add('hidden');
+                
+                // 1초 후 성공 (시뮬레이션)
+                setTimeout(() => {
+                    formButtonText.classList.remove('hidden');
+                    formSpinner.classList.add('hidden');
+                    formSuccess.classList.remove('hidden');
+                    signupForm.reset();
+
+                    // 3초 후 성공 메시지 숨기고 모달 닫기
+                    setTimeout(() => {
+                        formSuccess.classList.add('hidden');
+                        closeModal();
+                    }, 2000);
+
+                }, 1000);
+            });
+        });
+    </script>
+
+</body>
+
+    <!-- Firebase SDK 및 Firestore 연결 -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import { query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyC5N1JuGiJKzirclszJdOrfhQfWi_X4dTo",
+        authDomain: "adme-a4a95.firebaseapp.com",
+        projectId: "adme-a4a95",
+        storageBucket: "adme-a4a95.firebasestorage.app",
+        messagingSenderId: "677789946844",
+        appId: "1:677789946844:web:252973fd2aa93bca7d3519",
+        measurementId: "G-46X0QWE27G"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const form = document.getElementById("signupForm");
+      const successMsg = document.getElementById("formSuccess");
+      const errorMsg = document.getElementById("formError");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value.trim();
+
+        try {
+          // 중복 이메일 확인
+          const q = query(collection(db, "emails"), where("email", "==", email));
+          const existing = await getDocs(q);
+
+          if (!existing.empty) {
+            errorMsg.textContent = "이미 등록된 이메일입니다.";
+            errorMsg.classList.remove("hidden");
+            successMsg.classList.add("hidden");
+            return;
+          }
+
+          // 새 이메일 저장
+          await addDoc(collection(db, "emails"), {
+            email,
+            createdAt: serverTimestamp()
+          });
+          successMsg.classList.remove("hidden");
+          errorMsg.classList.add("hidden");
+          form.reset();
+        } catch (err) {
+          console.error(err);
+          successMsg.classList.add("hidden");
+          errorMsg.classList.remove("hidden");
+        }
+      });
+    </script>
+</html>
