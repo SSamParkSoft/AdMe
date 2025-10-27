@@ -448,6 +448,9 @@
             
             const openModal = () => modal.classList.remove('hidden');
             const closeModal = () => modal.classList.add('hidden');
+            
+            // 전역으로 노출
+            window.closeModal = closeModal;
 
             openModalButtons.forEach(btn => btn.addEventListener('click', openModal));
             closeModalButton.addEventListener('click', closeModal);
@@ -477,37 +480,6 @@
                 openModal();
             });
 
-            // 가짜 폼 제출 핸들러 (데모용)
-            const signupForm = document.getElementById('signupForm');
-            const formButtonText = document.getElementById('formButtonText');
-            const formSpinner = document.getElementById('formSpinner');
-            const formSuccess = document.getElementById('formSuccess');
-            const formError = document.getElementById('formError');
-
-            signupForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                // 로딩 상태
-                formButtonText.classList.add('hidden');
-                formSpinner.classList.remove('hidden');
-                formSuccess.classList.add('hidden');
-                formError.classList.add('hidden');
-                
-                // 1초 후 성공 (시뮬레이션)
-                setTimeout(() => {
-                    formButtonText.classList.remove('hidden');
-                    formSpinner.classList.add('hidden');
-                    formSuccess.classList.remove('hidden');
-                    signupForm.reset();
-
-                    // 3초 후 성공 메시지 숨기고 모달 닫기
-                    setTimeout(() => {
-                        formSuccess.classList.add('hidden');
-                        closeModal();
-                    }, 2000);
-
-                }, 1000);
-            });
         });
     </script>
 
@@ -535,10 +507,94 @@
       const form = document.getElementById("signupForm");
       const successMsg = document.getElementById("formSuccess");
       const errorMsg = document.getElementById("formError");
+      const formButtonText = document.getElementById("formButtonText");
+      const formSpinner = document.getElementById("formSpinner");
+
+      // 테스트용 이메일 검증 함수
+      function isValidEmail(email) {
+        const emailLower = email.toLowerCase();
+        
+        // 테스트용 도메인들
+        const testDomains = [
+          'test.com', 'test.co.kr', 'test.kr', 'example.com', 'example.co.kr',
+          'sample.com', 'sample.co.kr', 'demo.com', 'demo.co.kr', 'temp.com',
+          'temp.co.kr', 'fake.com', 'fake.co.kr', 'dummy.com', 'dummy.co.kr',
+          '10minutemail.com', 'tempmail.org', 'guerrillamail.com', 'mailinator.com',
+          'yopmail.com', 'throwaway.email', 'temp-mail.org', 'getnada.com'
+        ];
+        
+        // 테스트용 이메일 패턴들
+        const testPatterns = [
+          /^test@/i,
+          /^kim@/i,
+          /^admin@/i,
+          /^user@/i,
+          /^demo@/i,
+          /^sample@/i,
+          /^temp@/i,
+          /^fake@/i,
+          /^dummy@/i,
+          /^test\d+@/i,
+          /^user\d+@/i,
+          /^admin\d+@/i,
+          /^demo\d+@/i,
+          /^sample\d+@/i,
+          /^temp\d+@/i,
+          /^fake\d+@/i,
+          /^dummy\d+@/i,
+          /^testuser@/i,
+          /^testadmin@/i,
+          /^testdemo@/i,
+          /^testsample@/i,
+          /^testtemp@/i,
+          /^testfake@/i,
+          /^testdummy@/i
+        ];
+        
+        // 도메인 검사
+        const domain = emailLower.split('@')[1];
+        if (testDomains.includes(domain)) {
+          return false;
+        }
+        
+        // 패턴 검사
+        for (const pattern of testPatterns) {
+          if (pattern.test(emailLower)) {
+            return false;
+          }
+        }
+        
+        return true;
+      }
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const email = document.getElementById("email").value.trim();
+
+        // 로딩 상태 시작
+        formButtonText.classList.add("hidden");
+        formSpinner.classList.remove("hidden");
+        successMsg.classList.add("hidden");
+        errorMsg.classList.add("hidden");
+
+        // 이메일 형식 기본 검증
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          formButtonText.classList.remove("hidden");
+          formSpinner.classList.add("hidden");
+          errorMsg.textContent = "올바른 이메일 형식을 입력해주세요.";
+          errorMsg.classList.remove("hidden");
+          return;
+        }
+
+        // 테스트용 이메일 검증
+        if (!isValidEmail(email)) {
+          formButtonText.classList.remove("hidden");
+          formSpinner.classList.add("hidden");
+          errorMsg.textContent = "테스트용 이메일은 사용할 수 없습니다. 실제 이메일 주소를 입력해주세요.";
+          errorMsg.classList.remove("hidden");
+          return;
+        }
 
         try {
           // 중복 이메일 확인
@@ -546,9 +602,10 @@
           const existing = await getDocs(q);
 
           if (!existing.empty) {
+            formButtonText.classList.remove("hidden");
+            formSpinner.classList.add("hidden");
             errorMsg.textContent = "이미 등록된 이메일입니다.";
             errorMsg.classList.remove("hidden");
-            successMsg.classList.add("hidden");
             return;
           }
 
@@ -557,12 +614,26 @@
             email,
             createdAt: serverTimestamp()
           });
+          
+          // 성공 상태
+          formButtonText.classList.remove("hidden");
+          formSpinner.classList.add("hidden");
           successMsg.classList.remove("hidden");
           errorMsg.classList.add("hidden");
           form.reset();
+
+          // 3초 후 성공 메시지 숨기고 모달 닫기
+          setTimeout(() => {
+            successMsg.classList.add("hidden");
+            window.closeModal();
+          }, 2000);
+
         } catch (err) {
           console.error(err);
+          formButtonText.classList.remove("hidden");
+          formSpinner.classList.add("hidden");
           successMsg.classList.add("hidden");
+          errorMsg.textContent = "오류가 발생했습니다. 다시 시도해주세요.";
           errorMsg.classList.remove("hidden");
         }
       });
