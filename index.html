@@ -509,6 +509,13 @@
       const errorMsg = document.getElementById("formError");
       const formButtonText = document.getElementById("formButtonText");
       const formSpinner = document.getElementById("formSpinner");
+      const emailInput = document.getElementById("email");
+
+      // 이메일 입력 시 에러 메시지 숨기기
+      emailInput.addEventListener("input", () => {
+        errorMsg.classList.add("hidden");
+        successMsg.classList.add("hidden");
+      });
 
       // 테스트용 이메일 검증 함수
       function isValidEmail(email) {
