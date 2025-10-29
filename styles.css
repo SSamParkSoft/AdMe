@@ -14,13 +14,19 @@ body {
 
 /* 그리드 패턴 배경 */
 .bg-grid-pattern {
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-image: linear-gradient(to right, white 1px, transparent 1px),
+                      linear-gradient(to bottom, white 1px, transparent 1px);
     background-size: 2rem 2rem;
 }
 
 /* CTA 버튼 스타일 */
 .cta-button {
+  background: linear-gradient(to right, #4F46E5, #A855F7);
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+
+
     @apply px-3 py-4 text-lg font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-3xl transform transition-all duration-300;
     @apply hover:from-indigo-500 hover:to-purple-500 hover:scale-110 hover:shadow-indigo-500/50 hover:shadow-2xl active:scale-95;
     @apply border-2 border-transparent hover:border-indigo-400;
@@ -46,10 +52,10 @@ body {
 /* 버튼 애니메이션 효과 */
 @keyframes pulse-glow {
     0%, 100% {
-        box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+        box-shadow: 0 0 20px rgba(152, 70, 229, 0.4);
     }
     50% {
-        box-shadow: 0 0 30px rgba(79, 70, 229, 0.8), 0 0 40px rgba(168, 85, 247, 0.4);
+        box-shadow: 0 0 30px rgba(161, 119, 238, 0.8), 0 0 40px rgba(221, 191, 249, 0.728);
     }
 }
 
